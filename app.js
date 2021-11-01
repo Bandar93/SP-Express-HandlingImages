@@ -1,15 +1,17 @@
 const express = require("express");
 const productRoutes = require("./apis/products/routes");
-const connectDB = require("./db/database");
+const connectDB = require("./database");
 const morgan = require("morgan");
 const logger = require("./middleware/logger");
 const errorHandler = require("./middleware/errorHandler");
-
+const cors = require("cors");
+const path = require("path");
 const app = express();
 
 connectDB();
 
 // Middleware
+app.use(cors())
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(logger);
@@ -20,6 +22,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
+app.use("/media", express.static(path.join(__dirname,"media")));
 app.use("/api/products", productRoutes);
 
 app.use((req, res, next) => {
