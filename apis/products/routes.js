@@ -1,6 +1,7 @@
 const express = require("express");
 const Product = require("../../db/models/Product");
 const upload = require("../../middleware/multer");
+const { shopCreate } = require("../shops/shops.controllers")
 const {
   productListFetch,
   productCreate,
@@ -24,7 +25,8 @@ router.param("productId", async (req, res, next, productId) => {
   }
 });
 
-router.post("/",upload.single("image") ,productCreate);
+
+
 
 router.get("/", productListFetch);
 
