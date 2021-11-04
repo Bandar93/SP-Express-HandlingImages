@@ -7,9 +7,12 @@ const logger = require("./middleware/logger");
 const errorHandler = require("./middleware/errorHandler");
 const cors = require("cors");
 const path = require("path");
+const passport = require("passport")
+const userRoutes = require("./apis/users/users.routes");
 const app = express();
 
 connectDB();
+const {localStrategy} = require("./middleware/passport")
 
 // Middleware
 app.use(cors())
@@ -22,11 +25,14 @@ app.use((req, res, next) => {
   else next();
 });
 
+app.use(passport.initialize());
+passport.use(localStrategy);
+
 // Routes
 app.use("/api/products", productRoutes);
 app.use("/api/shops", shopRoutes);
 app.use("/media", express.static(path.join(__dirname,"media")));
-
+app.use("/api", userRoutes);
 
 
 app.use((req, res, next) => {
